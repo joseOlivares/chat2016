@@ -59,6 +59,7 @@
 	      });
 	      socket.on('chat message', function(msg){
 	        $('#messages').append($('<li class="list-group-item">').text(msg));
+	        $('#m').focus();
 	      });
 
 	      
