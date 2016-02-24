@@ -27,12 +27,11 @@
   <div class="container">
   	<div class="row">
   	<div class="col-xs-12 col-sm-12 col-md-12"> 
-  		<div class="chatbody" style="height: 120px; background-color: blue;"> 
 		<div class="panel panel-primary">
 		  <!-- Default panel contents -->
 		  <div class="panel-heading">Welcome to our Chat</div>
 
-		  <div class="panel-body">
+		  <div class="panel-body" style="max-height: 100;overflow-y: scroll;">
 				  <ul class="list-group " id="messages"> </ul> <!-- chat messages here -->
 		  </div>
 		  	<div class="panel-footer"> 
@@ -40,7 +39,6 @@
 				      <input id="m" autocomplete="off" class="form-control input-sm" /><button class="btn btn-default">Send</button>
 				    </form>
 		  	</div>
-		</div>
 		</div>
 	</div> <!-- end col -->
 	</div>	<!-- End row -->
