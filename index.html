@@ -26,12 +26,6 @@
   <body>
   <div class="container">
   	<div class="row">
-  			<!--
-		    <ul id="messages"></ul>
-		    <form action="">
-		      <input id="m" autocomplete="off" /><button>Send</button>
-		    </form> -->
-		    
 
 		<div class="panel panel-primary">
 		  <!-- Default panel contents -->
@@ -41,7 +35,7 @@
 
 		  	<div class="panel-footer"> 
 				    <form action="" class="form">
-				      <input id="m" autocomplete="off" /><button>Send</button>
+				      <input id="m" autocomplete="off" class="form-control" /><button class="btn btn-default">Send</button>
 				    </form>
 		  	</div>
 		</div>
@@ -59,7 +53,7 @@
 	      });
 	      socket.on('chat message', function(msg){
 	        $('#messages').append($('<li class="list-group-item">').text(msg));
-	        $('#m').focus();
+	        $('#m').focus(); //set focus to input
 	      });
 
 	      
