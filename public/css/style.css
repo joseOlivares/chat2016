@@ -1,13 +1,5 @@
 /* My CSS */
 
 .chatbody{
-    border: solid red 5px;
-    overflow: scroll;
-    height: 400px;
-/*  height: 100px;
-max-height: 350px;  
-overflow-y: scroll;
-background-color: green;*/
-
-
+min-height: 350px; max-height: 350px;overflow-y: scroll;
 }
