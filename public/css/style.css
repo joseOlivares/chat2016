@@ -1,6 +1,6 @@
 /* My CSS */
 
 .chatbody{
-height: 70px;  
+max-height: 350px;  
 overflow-y: scroll;
 }
