@@ -1,6 +1,8 @@
 /* My CSS */
 
 .chatbody{
+  height: 100px;
 max-height: 350px;  
 overflow-y: scroll;
+background-color: green;
 }
