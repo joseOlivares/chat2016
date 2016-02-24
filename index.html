@@ -59,7 +59,7 @@
 	      	if(msg==''){
 	      		return false; //if msg is empty, do nothing
 	      	}
-	        $('#messages').append(usericon+$('<li class="list-group-item">').text(msg+'</li>'));
+	        $('#messages').append($('<li class="list-group-item">').text(msg)+" x");
 
 	        $('#txtChat').scrollTop($('#txtChat')[0].scrollHeight);//moving to the last msg
 
