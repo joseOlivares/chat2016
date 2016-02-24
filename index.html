@@ -31,7 +31,7 @@
 		  <!-- Default panel contents -->
 		  <div class="panel-heading">Welcome to our Chat</div>
 
-		  <div class="panel-body chatbody " >
+		  <div class="panel-body chatbody" id="txtChat">
 				  <ul class="list-group " id="messages"> </ul> <!-- chat messages here -->
 		  </div>
 		  	<div class="panel-footer"> 
@@ -58,6 +58,9 @@
 	      		return false; //if msg is empty, do nothing
 	      	}
 	        $('#messages').append($('<li class="list-group-item">').text(msg));
+
+	        $('#txtChat').scrollTop($('#txtChat')[0].scrollHeight);
+
 	        $('#m').focus(); //set focus to input
 	      });
 
