@@ -31,7 +31,7 @@
 		  <!-- Default panel contents -->
 		  <div class="panel-heading">Welcome to our Chat</div>
 
-		  <div class="panel-body chatbody" id="txtChat">
+		  <div class="panel-body chatbody" id="txtChat"><span class="glyphicon glyphicon-user"></span>
 				  <ul class="list-group " id="messages"> </ul> <!-- chat messages here -->
 		  </div>
 		  	<div class="panel-footer"> 
@@ -57,7 +57,7 @@
 	      	if(msg==''){
 	      		return false; //if msg is empty, do nothing
 	      	}
-	        $('#messages').append($('<li class="list-group-item">').text('<span class="glyphicon glyphicon-user"></span> '+msg));
+	        $('#messages').append($('<li class="list-group-item">').text(msg));
 
 	        $('#txtChat').scrollTop($('#txtChat')[0].scrollHeight);//moving to the last msg
 
