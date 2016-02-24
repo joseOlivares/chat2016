@@ -4,7 +4,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public')); //serving statics files like css, js, images
 
 var port=process.env.PORT || 3000;
 
