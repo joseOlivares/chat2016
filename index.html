@@ -12,7 +12,7 @@
 	<!-- <script src="libs/js/jquery.js" type="text/javascript"></script>  -->
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
 	<script src="/js/bootstrap.min.js" type="text/javascript"></script>  
- 
+ 	<script src="/js/jlfunctions.js" type="text/javascript"></script> 
 	<!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>  -->
 
@@ -29,7 +29,8 @@
   	<div class="col-xs-12 col-sm-12 col-md-12"> 
 		<div class="panel panel-primary">
 		  <!-- Default panel contents -->
-		  <div class="panel-heading">Welcome to our Chat</div>
+		  <div class="panel-heading">Welcome to our Chat,  Users Connected: <span class="badge" id="usersConnected"></span>
+		  </div>
 
 		  <div class="panel-body chatbody" id="txtChat">
 				  <ul class="list-group " id="messages"> </ul> <!-- chat messages here -->
@@ -37,6 +38,10 @@
 		  	<div class="panel-footer"> 
 				    <form action="" class="form-inline">
 				      <input id="m" autocomplete="off" class="form-control input-sm" /><button class="btn btn-default">Send</button>
+				      
+				      <label>From Id<input id="idsender" class="form-control input-xs"/></label>
+				      <label>To Id<input id="idreceiver" class="form-control input-xs"/></label>
+
 				    </form>
 		  	</div>
 		</div>
@@ -50,24 +55,48 @@
 	      var socket = io(); //creating socket connection
 	      var usericon='<span class="glyphicon glyphicon-user"></span> ';
 
+/*
+    // Initial set of notes, loop through and add to list
+    socket.on('initial msgs', function(data){
+        var html = '';
+        for (var i = 0; i < data.length; i++){
+            // We store html as a var then add to DOM after for efficiency
+            html += '<li class="list-group-item">' + usericon + data[i].note + '</li>';
+        }
+        $('#messages').html(html);
+    }) */
+
+
 	      $('form').submit(function(){
-	        socket.emit('chat message', $('#m').val());
+
+	      	var arraymsg=[$('#idsender').val(),$('#idreceiver').val(),$('#m').val()];
+	      	socket.emit('chat message', arraymsg); //emitiendo mensaje a node
+	        //socket.emit('chat message', $('#m').val()); //emitiendo mensaje a node
 	        $('#m').val('');
 	        return false;
 	      });
+
 	      socket.on('chat message', function(msg){
 	      	if(msg==''){
 	      		return false; //if msg is empty, do nothing
 	      	}
-	      	//$('#messages').append(usericon);
-	        $('#messages').append($('<li class="list-group-item">').text(msg));
+	        
+	      	var timenow=getDateTime(); //personal function in jlfunctions.js
+	        //$('#messages').append($('<li class="list-group-item">').text(msg));
+	        //msg[2] contiene el mensaje enviado
+ 			$('#messages').append('<li class="list-group-item">' + usericon + msg[2] + '    ' + timenow + '</li>');
 
 	        $('#txtChat').scrollTop($('#txtChat')[0].scrollHeight);//moving to the last msg
 
 	        $('#m').focus(); //set focus to input
 	      });
 
-	      
+   
+    socket.on('users connected', function(data){
+        $('#usersConnected').html(data); //displaying how many conncetions are.
+    });    
+
+
     </script>
   </body>
 </html>
