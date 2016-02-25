@@ -3,12 +3,13 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-
 app.use(express.static(__dirname + '/public')); //serving statics files like css, js, images
 
 var port=process.env.PORT || 3000; //this is for heroku
 
 
+var serverTime = require('./public/js/jlfunctions.js'); //importing my functions for time
+//console.log('Time= ' + serverTime.myTime());
 
 //---------------------------------
 var mysql      = require('mysql');
@@ -24,7 +25,7 @@ connection.connect();
 
 connection.query('SELECT * FROM user', function(err, rows, fields) {
   if (!err)
-    console.log('The solution is: ', rows);
+     console.log('Connected to external database'); //console.log('The solution is: ', rows);
   else
     console.log('Error while performing Query.',err);
 });
@@ -50,13 +51,25 @@ io.on('connection', function(socket){
     io.sockets.emit('users connected', socketCount);    // Let all sockets know how many are connected
 
 	socket.on('chat message', function(msg){ //broadcasting msgs
-		notes.push(msg);
+		//notes.push(msg);
 
-	    io.emit('chat message', msg);
+		msg[3]=serverTime.myTime(); //adding server time to msg	
+		msg[4]=0; //message for all= 0 (private message)
 
-	    var now = new Date();
-	    console.log('idSender= '+ msg[0] + ' idReceiver=' + msg[1] + ' Msg='+ msg[2] + ' Time=' + now);
-	    //connection.query('INSERT INTO message (idsender,idreceiver,msg,datetime,forall) VALUES (?)',msg.note);
+	    io.emit('chat message', msg); //sending msg to index.html
+
+	    console.log('idSender= '+ msg[0] + ' idReceiver=' + msg[1] + ' Msg='+ msg[2] + ' Time=' +msg[3]);
+	    
+	    var insertMsg='INSERT INTO message (idsender,idreceiver,msg,datetime,forall) VALUE(?)';
+
+	    connection.query(insertMsg,msg,function(error){
+		     if (error) {
+	            console.log(error); //.message
+	        } else {
+	            console.log('Message inserted successfully');    
+	        }
+
+	    });
 
 	});
 
