@@ -30,6 +30,7 @@
 		<div class="panel panel-primary">
 		  <!-- Default panel contents -->
 		  <div class="panel-heading">Welcome to our Chat,  Users Connected: <span class="badge" id="usersConnected"></span>
+		  <button id="btnMsg" type="button" class="btn btn-default">Load Msgs</button>
 		  </div>
 
 		  <div class="panel-body chatbody" id="txtChat">
@@ -55,17 +56,23 @@
 	      var socket = io(); //creating socket connection
 	      var usericon='<span class="glyphicon glyphicon-user"></span> ';
 
-/*
-    // Initial set of notes, loop through and add to list
-    socket.on('initial msgs', function(data){
-        var html = '';
-        for (var i = 0; i < data.length; i++){
-            // We store html as a var then add to DOM after for efficiency
-            html += '<li class="list-group-item">' + usericon + data[i].note + '</li>';
-        }
-        $('#messages').html(html);
-    }) */
 
+    // Loading stored messages from this current chat user
+	    socket.on('initial msgs', function(data){
+	    	//alert(data[0][0].msg);
+	    	//alert(data[0][12].msg); //mensaje del registro numero 13
+	        for (var i = 0; i < data[0].length; i++){
+	 			$('#messages').append('<li class="list-group-item">' + usericon +' idsender: '+data[0][i].idsender+'  '+data[0][i].msg + '    ' + data[0][i].datetime + '</li>');
+	        }
+	 	    $('#txtChat').scrollTop($('#txtChat')[0].scrollHeight);//moving to the last msg  
+	 	    
+		    $('#m').focus(); //set focus to input 	         
+	    }); 
+
+
+		$('#btnMsg').on('click',function(){
+			alert('Llamada');
+		})
 
 	      $('form').submit(function(){
 
@@ -81,7 +88,7 @@
 	      		return false; //if msg is empty, do nothing
 	      	}
 	        
-	      	var timenow=getDateTime(); //personal function in jlfunctions.js
+	      	var timenow=getDateTime(); //getting time from personal function in jlfunctions.js
 	        //$('#messages').append($('<li class="list-group-item">').text(msg));
 	        //msg[2] contiene el mensaje enviado
  			$('#messages').append('<li class="list-group-item">' + usericon + msg[2] + '    ' + msg[3] + '</li>');
