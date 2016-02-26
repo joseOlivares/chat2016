@@ -12,8 +12,9 @@ var serverTime = require('./public/js/jlfunctions.js'); //importing my functions
 //console.log('Time= ' + serverTime.myTime());
 
 //---------------------------------
-var mysql      = require('mysql');
-var connection = mysql.createConnection({
+var mysql = require('mysql');
+
+/*var connection = mysql.createConnection({
   host     : '76.163.252.213',
   user     : 'AAAlidv_user',
   password : 'Chat2016',
@@ -30,12 +31,22 @@ connection.query('SELECT * FROM user', function(err, rows, fields) {
     console.log('Error while performing Query.',err);
 });
 
+
+*/
+
+var pool= mysql.createPool({
+  host     : '76.163.252.213',
+  user     : 'AAAlidv_user',
+  password : 'Chat2016',
+  insecureAuth: true, 
+  database : 'AAAlidv_chat'
+});
+
+
 // Define/initialize our global vars
 var notes = [];
 var isInitMsgs = false;
 var socketCount = 0;
-
-
 
 //-------------------------------
 
@@ -52,7 +63,6 @@ io.on('connection', function(socket){
 
 	socket.on('chat message', function(msg){ //broadcasting msgs
 		//notes.push(msg);
-
 		msg[3]=serverTime.myTime(); //adding server time to msg	
 		msg[4]=0; //message for all= 0 (private message)
 
@@ -60,18 +70,53 @@ io.on('connection', function(socket){
 
 	    console.log('idSender= '+ msg[0] + ' idReceiver=' + msg[1] + ' Msg='+ msg[2] + ' Time=' +msg[3]);
 	    
-	    var insertMsg='INSERT INTO message (idsender,idreceiver,msg,datetime,forall) VALUE(?)';
+	    var insertMsg='INSERT INTO message (idsender,idreceiver,msg,datetime,forall) VALUES(?)';
 
-	    connection.query(insertMsg,msg,function(error){
-		     if (error) {
-	            console.log(error); //.message
-	        } else {
-	            console.log('Message inserted successfully');    
-	        }
 
-	    });
+		pool.getConnection(function(err, connection) { 
+		  // Use the connection
+		  connection.query( insertMsg,[msg],function(err, rows) {
+		  		if(err){
+		  			console.log(err);
+		  			return;
+		  		}else{
+		  			console.log('Msg inserted on database!');
+		  		}
+		    // And done with the connection.
+		    connection.release();
+		    // Don't use the connection here, it has been returned to the pool.
+		  });
+		});
 
-	});
+	});//end socket.on 'chat message'
+ 
+
+
+function handle_database(req,res) {
+    pool.getConnection(function(err,connection){
+        if (err) {
+          connection.release();
+          res.json({"code" : 100, "status" : "Error in connection database"});
+          return;
+        }  
+
+        console.log('connected as id ' + connection.threadId);
+       
+        connection.query("select * from user",function(err,rows){
+            connection.release();
+            if(!err) {
+                res.json(rows);
+            }          
+        });
+
+        connection.on('error', function(err) {      
+              res.json({"code" : 100, "status" : "Error in connection database"});
+              return;    
+        });
+  });
+}
+
+
 
 /*
     // Check to see if initial query/notes are set
@@ -94,9 +139,6 @@ io.on('connection', function(socket){
     }
 */
 
-
-
-
     socket.on('disconnect', function () {
 
         socketCount--; // Decrease the socket count on a disconnect	
@@ -107,9 +149,9 @@ io.on('connection', function(socket){
 });
 
 
-
 http.listen(port, function(){
   console.log('listening on *:3000');
 });
 
-connection.end(); //closing database connection
+
+
