@@ -38,45 +38,31 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
 
-	console.log('an user connected...');
-	//console.log(socket);
+	console.log('an user connected');
     socketCount++;// Socket has connected, increase socket count
 
     io.sockets.emit('users connected', socketCount);    // Let all sockets know how many are connected
 
 	socket.on('chat message', function(msg){ //broadcasting msgs
-		//notes.push(msg);	
-		msg[4]=serverTime.myTime();
-		msg[5]=0; //message for all= 0 (private message)
-	    //msg[3] stored nickname
-		var msgSinNick=[];
+		//notes.push(msg);
+		msg[3]=serverTime.myTime(); //adding server time to msg	
+		msg[4]=0; //message for all= 0 (private message)
 
-		msgSinNick[0]=msg[0];//idsender
-		msgSinNick[1]=msg[1];//idreceiver
-		msgSinNick[2]=msg[2]; //message
-		msgSinNick[3]=serverTime.myTime(); //adding server time to msg
-		msgSinNick[4]=0; //message forall= 0 (private message)  
+	    io.emit('chat message', msg); //sending msg to index.html  
 
-		//=[msg[0],msg[1],msg[2],currentServTime,0]; //making compy without nickname
+	    console.log('idSender= '+ msg[0] + ' idReceiver=' + msg[1] + ' Msg='+ msg[2] + ' Time=' +msg[3]);
 	    
-		io.sockets.in(msg[0]).emit('chat message',msg);//NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
-		io.sockets.in(msg[1]).emit('chat message',msg);//private msg to receiver
-	    //io.emit('chat message', msg); //sending msg to index.html  client
-
-
-	    console.log('idSender= '+ msg[0] + ' idReceiver=' + msg[1] + ' Msg='+ msg[2] + ' Time=' +msg[4]);	    
-
 	    var insertMsg='INSERT INTO message (idsender,idreceiver,msg,datetime,forall) VALUES(?)';
+
 
 		pool.getConnection(function(err, connection) { 
 		  // Use the connection
-		  connection.query(insertMsg,[msgSinNick],function(err, rows) {
+		  connection.query( insertMsg,[msg],function(err, rows) {
 		  		if(err){
 		  			console.log(err);
 		  			return;
 		  		}else{
 		  			console.log('Msg inserted on database!');
-		  			//probar llamar desde aqui
 		  		}
 		    // release connection
 		    connection.release();
@@ -89,11 +75,7 @@ io.on('connection', function(socket){
 
 	socket.on('user logged',function(idCurrUser){ //loading info from logged user
 		//userInfo=userx;
-		socket.join(idCurrUser); //adding user id to an unique room
-
 		var selectUser='SELECT * FROM user WHERE iduser=?';
-
-		//console.log('User id '+idCurrUser);
  
 		pool.getConnection(function(err, connection) { 
 
@@ -103,11 +85,9 @@ io.on('connection', function(socket){
 		  			console.log(err);
 		  			return;
 		  		}else{
-		  			//userInfo.push(rows); //user information
-		  			socket.emit('user logged',rows);
-
+		  			userInfo.push(rows); //user information
 		  			loadData(idCurrUser);
-
+		  			socket.emit('user logged',rows);
 		  			//console.log(rows);
 		  		}
 		    // release connection
@@ -119,7 +99,7 @@ io.on('connection', function(socket){
 
 
 	function loadData(myUser){
-	//if(!isInitMsgs){ //searching stored messages
+	if(!isInitMsgs){ //searching stored messages
 		//var selectMsgs='SELECT * FROM message WHERE idSender=? or idreceiver=? ORDER BY datetime';
 		var selectMsgs='SELECT message.idmsg, message.idsender, user.nickname, message.idreceiver,user.email, message.msg,'+
 		' message.datetime FROM message INNER JOIN user ON (message.idsender = user.iduser)'+
@@ -130,27 +110,30 @@ io.on('connection', function(socket){
 		//console.log('idUsuario Actual Logeado: '+myUser)
 		pool.getConnection(function(err, connection) { 
 		  // Use the connection
-		  connection.query(selectMsgs,[myUser,myUser],function(err, zrows) {
+		  connection.query(selectMsgs,[myUser,myUser],function(err, rows) {
 		  		if(err){
 		  			console.log(err);
 		  			return;
 		  		}else{
-		  			dataRows.push(zrows); //copying data from rows to array dataRows
-		  			socket.emit('initial msgs',zrows); //sending msgs to index.html for first load
+		  			dataRows.push(rows); //copying data from rows to array dataRows
+		  			socket.emit('initial msgs',rows); //sending msgs to index.html for first load
+		  			isInitMsgs=true;
 		  			console.log('Msg loaded from database!');
-		  			//console.log(zrows);
+		  			//console.log(rows);
 		  		}
 		    // release connection
 		    connection.release();
 		    // Don't use the connection here, it has been returned to the pool.
 		  });
 		});
-	/*}else{
+	}else{
 		socket.emit('initial msgs',dataRows); //sending msgs to index.html 
-		//isInitMsgs=false;
-	}*/
+		isInitMsgs=false;
+	}
 	//-----------------------------------END of bloque IF
 }//end function loadData;
+
+
 
 
 
@@ -163,6 +146,8 @@ io.on('connection', function(socket){
     });
 
 });
+
+
 
 
 http.listen(port, function(){

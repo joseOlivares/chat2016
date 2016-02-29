@@ -14,9 +14,10 @@ db.connect(function(err){
 })
  
 // Define/initialize our global vars
-var notes = []
-var isInitNotes = false
-var socketCount = 0
+var notes = [];
+var isInitNotes = false;
+var socketCount = 0;
+ 
  
 io.sockets.on('connection', function(socket){
     // Socket has connected, increase socket count

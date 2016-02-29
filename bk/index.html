@@ -30,76 +30,66 @@
 	      var usericon='<span class="glyphicon glyphicon-user blue"></span> ';
 	      var currentUser='nobody';//current user nickname 
 
-			$('#idsender').prop('disabled', false);
-   
-    socket.on('users connected', function(data){
-        $('#usersConnected').html(data); //displaying how many conncetions are.
-    });    
+    // Loading stored messages from this current chat user
+	    socket.on('initial msgs', function(data){
+	    	alert('Cargando datos...');
+	    	//alert(data[0][12].msg); //mensaje del registro numero 13
+	        for (var i = 0; i < data[0].length; i++){
+	 			$('#messages').append('<li class="list-group-item">' + usericon +' '+data[0][i].nickname+': </br>'+data[0][i].msg + '    ' + '		'+data[0][i].datetime + '</li>');
+	        }
+	 	    
+	        if(data[0].length>0){ //si existe al menos un mensaje guardado del usuario actual
+	 	    	currentUser=data[0][0].nickname; // saving nickname of currect user
+	 	    }else{
+	 	    	currentUser='No registered'; //saving some value for current user
+	 	    }
+
+	 	    $('#txtChat').scrollTop($('#txtChat')[0].scrollHeight);//moving to the last msg  
+	 	    
+		    $('#m').focus(); //set focus to input 	         
+	    }); 
+
 
 		$('#btnLogin').on('click',function(){
 			var loginId=$('#idsender').val();//id current logged user
 			$('#idsender').prop('disabled', true);
-			socket.emit('user logged',loginId); //enviando ID de usurio logead			
-		});
+			socket.emit('user logged',loginId); //enviando ID de usurio logeado
+		})
 
-		socket.on('user logged',function(myInfo){//receives current user data, this is an array		
+		socket.on('user logged',function(myInfo){//receives current user data, this is an array
 			currentUser=myInfo[0].nickname;
-			//alert(currentUser);	
 		});
-
-    // Loading stored messages from this current chat user
-	    socket.on('initial msgs', function(data){
-	    	alert('Cargando datos...'+data.length);
-	    	//alert(data[0][12].msg); //mensaje del registro numero 13
-	        for (var i = 0; i < data.length; i++){
-	 			$('#messages').append('<li class="list-group-item">' + usericon +' '+data[i].nickname+': </br>'+data[i].msg + '    ' + '		'+data[i].datetime + '</li>');
-	        }
-	 	    
-	       /* if(data.length>0){ //si existe al menos un mensaje guardado del usuario actual
-	 	    	currentUser=data[0].nickname; // saving nickname of currect user
-	 	    }*/
-
-	 	    $('#txtChat').scrollTop($('#txtChat')[0].scrollHeight);//moving to the last msg  
-		    $('#m').focus(); //set focus to input 	         
-	    }); 
 
 
 		//Form Submitt  Event	
 	      $('form').submit(function(){ //sending data 
 
-	      	var arraymsg=[$('#idsender').val(),$('#idreceiver').val(),$('#m').val(),currentUser];
-
-	      	if($('#m').val()==''){
-	      		$('#m').focus(); 
-	      		return false;
-	      	}else{
-	      		socket.emit('chat message', arraymsg); //envindo mensaje a node
-	      		//showMsg(arraymsg);
-	      	}
+	      	var arraymsg=[$('#idsender').val(),$('#idreceiver').val(),$('#m').val()];
+	      	socket.emit('chat message', arraymsg); //envindo mensaje a node
 	        //socket.emit('chat message', $('#m').val()); //emitiendo mensaje a node
+	        $('#m').val('');
 	        return false;
 	      });
 	     //---------------------------------------------------
 
-	    /*function showMsg(msg2){
+	     
+	      socket.on('chat message', function(msg){ //recive informacion ingresda en chat
+	      	if(msg==''){
+	      		return false; //if msg is empty, do nothing
+	      	}
+	        
 	      	var timenow=getDateTime(); //getting time from personal function in jlfunctions.js
- 			$('#messages').append('<li class="list-group-item">' + usericon + msg2[3] +':</br>'+msg2[2] + '    ' + timenow + '</li>');
-	        $('#txtChat').scrollTop($('#txtChat')[0].scrollHeight);//moving to the last msg
-	        $('#m').focus(); //set focus to input	     
-	     } */
-
-
-	    
-	      socket.on('chat message', function(msg2){ //recive informacion ingresda en chat
-	      	//alert(msg);
-	      	var timenow=getDateTime(); //getting time from personal function in jlfunctions.js
- 			$('#messages').append('<li class="list-group-item">' + usericon + msg2[3] +':</br>'+msg2[2] + '    ' + msg2[4] + '</li>');
+ 			$('#messages').append('<li class="list-group-item">' + usericon +' '+currentUser+':</br>'+msg[2] + '    ' + msg[3] + '</li>');
 
 	        $('#txtChat').scrollTop($('#txtChat')[0].scrollHeight);//moving to the last msg
-	        $('#m').val()='';
+
 	        $('#m').focus(); //set focus to input
-	      });  
-	
+	      });
+
+   
+    socket.on('users connected', function(data){
+        $('#usersConnected').html(data); //displaying how many conncetions are.
+    });    
 
 
 
@@ -137,5 +127,9 @@
 	</div>	<!-- End row -->
 
    </div> <!-- End container-->
+
+    <script>
+
+    </script>
   </body>
 </html>
