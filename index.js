@@ -49,6 +49,8 @@ io.on('connection', function(socket){
 		msg[4]=serverTime.myTime();
 		msg[5]=0; //message for all= 0 (private message)
 	    //msg[3] stored nickname
+		
+	    //console.log(msg);
 		var msgSinNick=[];
 
 		msgSinNick[0]=msg[0];//idsender
@@ -123,7 +125,7 @@ io.on('connection', function(socket){
 		//var selectMsgs='SELECT * FROM message WHERE idSender=? or idreceiver=? ORDER BY datetime';
 		var selectMsgs='SELECT message.idmsg, message.idsender, user.nickname, message.idreceiver,user.email, message.msg,'+
 		' message.datetime FROM message INNER JOIN user ON (message.idsender = user.iduser)'+
-		' WHERE message.idSender=? or message.idreceiver=? ORDER BY datetime';	
+		' WHERE message.idSender=? or message.idreceiver=? ORDER BY message.idmsg ';	
 
 		//HACER UN EMIT CON EL NICK DEU USUARIO LOGUEADO PARA PROCESAR LA INFO
 		//userInfo[0].iduser; //this param will be send from index.html when user starts session on chat

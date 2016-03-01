@@ -49,7 +49,7 @@
 
 		socket.on('user logged',function(myInfo){//receives current user data, this is an array		
 			currentUser=myInfo[0].nickname;
-			currentUserId=myInfo[0].iduser; //iduser logged
+			//currentUserId=myInfo[0].iduser; //iduser logged
 			$('#btnSend').prop('disabled',false);//enabling btn send
 			//alert(currentUser);	
 		});
@@ -61,10 +61,10 @@
 	        for (var i = 0; i < data.length; i++){
 
 	        	if(data[i].idsender===currentUserId){ //right allingment for my messages
-		 			$('#messages').append('<div class="bubble me">' + usericon +' '+data[i].nickname+': </br>'+data[i].msg + '    ' + '<h6><small class="text-right">  '+data[i].datetime + '</small></h6></div>');
+		 			$('#messages').append('<div class="bubble me"><div class="pull-right">' + usericon +' '+data[i].nickname+': </br>'+data[i].msg + '    ' + '<h6><small class="text-right">  '+data[i].datetime + '</small></h6></div></div>');
 		 			
 	        	}else{
-		 			$('#messages').append('<div class="bubble you list-group-item"">' + usericon +' '+data[i].nickname+': </br>'+data[i].msg + '    ' + '<h6><small>  '+data[i].datetime + '</small></h6></div>');
+		 			$('#messages').append('<div class="bubble you">' + usericon +' '+data[i].nickname+': </br>'+data[i].msg + '    ' + '<h6><small>  '+data[i].datetime + '</small></h6></div>');
 		 			}
 	        }
 	 	    
@@ -97,11 +97,11 @@
 	     //---------------------------------------------------
 	    
 	      socket.on('chat message', function(msg2){ //recive informacion ingresda en chat
-	      	//alert(msg);
+	      	//alert('current id '+currentUserId);
 	      	var timenow=getDateTime(); //getting time from personal function in jlfunctions.js
  			
- 			if(msg[0]==currentUserId){//right allingment for my messages
-	 			$('#messages').append('<div class="bubble me">' + usericon + msg2[3] +':</br>'+msg2[2] + '<h6><small>  ' + msg2[4] + '</small></h6></div>');
+ 			if(msg2[0]===currentUserId){//right allingment for my messages
+	 			$('#messages').append('<div class="bubble me"><div class="pull-right">' + usericon + msg2[3] +':</br>'+msg2[2] + '<h6><small class="text-right">  ' + msg2[4] + '</small></h6></div></div>');
  			}else{
 	 			$('#messages').append('<div class="bubble you">' + usericon + msg2[3] +':</br>'+msg2[2] + '<h6><small>  ' + msg2[4] + '</small></h6></div>');
 			}
@@ -135,7 +135,7 @@
 		  </div>
 		  	<div class="panel-footer"> 
 				<form action="" class="form-inline">
-				      <input id="m" autocomplete="off" class="form-control input-xs" placeholder="Write a message here..." /><button class="btn btn-default" id="btnSend">Send</button>
+				      <input id="m" autocomplete="off" class="form-control input-xs" placeholder="" /><button class="btn btn-default" id="btnSend">Send</button>
 				     <!-- <label>From Id<input id="idsender" class="form-control input-xs"/></label> -->
 				      <label>To Id<input id="idreceiver" class="form-control input-xs"/></label>
 				</form>
