@@ -59,7 +59,7 @@ io.on('connection', function(socket){
 
 		//=[msg[0],msg[1],msg[2],currentServTime,0]; //making compy without nickname
 	    
-		io.sockets.in(msg[0]).emit('chat message',msg);//NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+		io.sockets.in(msg[0]).emit('chat message',msg);//Copy of private message to sender
 		io.sockets.in(msg[1]).emit('chat message',msg);//private msg to receiver
 	    //io.emit('chat message', msg); //sending msg to index.html  client
 
