@@ -56,7 +56,9 @@
 
     // Loading stored messages from this current chat user
 	    socket.on('initial msgs', function(data){
-	    	alert('Cargando datos...'+data.length);
+	    	//alert('Cargando datos...'+data.length);
+
+	    	alert('Sender='+data[i].idsender +' currentUserId='+currentUserId );
 	    	//alert(data[0][12].msg); //mensaje del registro numero 13     style="text-align: right;"
 	        for (var i = 0; i < data.length; i++){
 

@@ -30,6 +30,7 @@ min-height: 350px; max-height: 350px;overflow-y: scroll;
     width:  20px;
 }
 
+
 .you {
 	width: 90%;
     float: left;   
@@ -44,10 +45,11 @@ min-height: 350px; max-height: 350px;overflow-y: scroll;
 .me {
 	width: 90%;
     float: right;    
-    margin: 5px 20px 5px 45px;         
+    margin: 5px 20px 5px 45px;      
 }
 
 .me::before {
     box-shadow: 2px -2px 2px 0 rgba( 178, 178, 178, .4 );
     right: -9px;    
 }
+
