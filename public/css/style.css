@@ -1,7 +1,7 @@
 /* My CSS */
 
 .chatbody{
-min-height: 350px; max-height: 350px;overflow-y: scroll;
+min-height: 350px; max-height: 450px;overflow-y: scroll;
  /*width: 400px;*/
 }
 
@@ -79,4 +79,5 @@ min-height: 350px; max-height: 350px;overflow-y: scroll;
     box-shadow: 2px -2px 2px 0 rgba( 178, 178, 178, .4 );
     right: -9px;    
 }
+
 
