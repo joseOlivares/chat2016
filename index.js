@@ -16,11 +16,11 @@ var mysql = require('mysql');
 
 
 var pool= mysql.createPool({
-  host     : '76.163.252.213',
-  user     : 'AAAlidv_user',
-  password : 'Chat2016',
+  host     : '127.0.0.1',
+  user     : 'user',
+  password : 'pass',
   insecureAuth: true, 
-  database : 'AAAlidv_chat'
+  database : 'chat'
 });
 
 
