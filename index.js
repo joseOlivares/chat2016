@@ -16,7 +16,8 @@ var mysql = require('mysql');
 
 
 var pool= mysql.createPool({
-  host     : 'sql9.freemysqlhosting.net:3306',
+  host     : 'sql9.freemysqlhosting.net',
+  port	   : 3306,	
   user     : 'sql9237091',
   password : 'rsB8uvnCcJ',
   insecureAuth: true, 
