@@ -1,8 +1,9 @@
 /* My CSS */
 
 .chatbody{
-min-height: 350px; max-height: 450px;overflow-y: scroll;
- /*width: 400px;*/
+min-height:100%; max-height: 450px;overflow-y: scroll;
+ /*width: 400px;
+ min-height: 350px	*/
 }
 
 .bubble{
