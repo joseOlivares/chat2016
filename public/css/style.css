@@ -1,7 +1,8 @@
 /* My CSS */
 
 .chatbody{
-min-height:325px; max-height: 450px;overflow-y: scroll;
+min-height:250px; max-height: 450px;overflow-y: scroll;
+background-image: url("../img/fondo_chat.png");	
  /*width: 400px;
  min-height: 350px	*/
 }
