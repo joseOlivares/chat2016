@@ -1,11 +1,17 @@
 /* My CSS */
 
 .chatbody{
-min-height:250px; max-height: 450px;overflow-y: scroll;
+min-height:450px; max-height: 450px;overflow-y: scroll;
 background-image: url("../img/fondo_chat.gif");	
  /*width: 400px;
  min-height: 350px	*/
 }
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+ .chatbody{min-height: 100vh; max-height:100vh;};    
+}
+
 
 .bubble{
     background-color: #FFFAFA;
