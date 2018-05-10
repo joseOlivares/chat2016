@@ -9,7 +9,7 @@ background-image: url("../img/fondo_chat.gif");
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
- .chatbody{min-height: 250px; max-height:250px;};    
+ .chatbody{height:100%;};    
 }
 
 
