@@ -3,7 +3,7 @@
 A Node JS Chat project, this is an example of Node JS server and SocketIO.
 
 You can test this example on:
-                                  chat2016.herokuapp.com
+                                  http://chat2016.herokuapp.com
 
 
 Visit my LinkedIn profile:  
