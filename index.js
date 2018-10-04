@@ -21,7 +21,7 @@ var pool= mysql.createPool({
   user     : 'jlchat',
   password : 'jlchat2016',
   insecureAuth: true, 
-  database : 'dbchat2016'
+  database : 'dbchat2016x'
 });
 
 
