@@ -21,7 +21,7 @@ var pool= mysql.createPool({
   user     : 'jlchat',
   password : 'jlchat2016',
   insecureAuth: true, 
-  database : 'dbchat2016x'
+  database : 'dbchat2016'
 });
 
 
@@ -38,7 +38,7 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
-
+    console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 	console.log('an user connected...');
 	//console.log(socket);
     socketCount++;// Socket has connected, increase socket count
