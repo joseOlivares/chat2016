@@ -38,7 +38,6 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
-    console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 	console.log('an user connected...');
 	//console.log(socket);
     socketCount++;// Socket has connected, increase socket count
@@ -170,6 +169,7 @@ io.on('connection', function(socket){
 
 http.listen(port, function(){
   console.log('listening on *:'+port);
+      console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 });
 
 
