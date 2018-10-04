@@ -1,5 +1,5 @@
 var app={
-	serverUrl:'http://chat2016.herokuapp.com/',
+	serverUrl:'https://chat2016.herokuapp.com/',
 
 	listenSocket:function(){
 	     var socket = io.connect(this.serverUrl); //creating socket connection
